@@ -20,3 +20,6 @@ Route | HTTP | Description
 ----- | ---- | -----------
 /api/books | GET | Get all the books info
 /api/books | POST | create a book
+/api/books/find-isbn | POST | find a book using ISBN
+/api/books/delete | DELETE | delete a book
+/api/books/edit | PUT | edit book data
