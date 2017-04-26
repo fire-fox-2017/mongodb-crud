@@ -36,9 +36,29 @@ module.exports = {
         stock: stock
       }, function(err, result) {
         if (result) {
-          res.send(`Inserted documents into the collection books :\n ${result}`);
+          res.json(result);
         } else {
           res.send(`ERR input :\n ${err}`);
+        }
+        db.close();
+      });
+
+    });
+  },
+  delete: (req, res, next) => {
+    let isbn = req.params.isbn;
+    MongoClient.connect(url, function(err, db) {
+      console.log("Connected successfully to server bookscrud");
+
+      var collection = db.collection('books');
+      // delete documents
+      collection.deleteOne({
+        isbn: isbn
+      }, function(err, result) {
+        if (result) {
+          res.json(result);
+        } else {
+          res.send(`ERR Delete :\n ${err}`);
         }
         db.close();
       });
