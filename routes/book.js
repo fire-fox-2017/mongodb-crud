@@ -8,6 +8,11 @@ var MongoClient = require('mongodb').MongoClient
 var url = 'mongodb://localhost/library';
 
 /* GET users listing. */
-router.get('/', book.insert);
+router.get('/insert', book.insert);
+router.get('/findall', book.findall);
+router.get('/:id', book.findone);
+router.post('/create', book.create);
+router.delete('/:id', book.remove);
+router.put('/:id', book.update);
 
 module.exports = router;
