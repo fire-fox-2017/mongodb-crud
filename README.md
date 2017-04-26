@@ -23,5 +23,5 @@ $ npm start
 | ------ | ------ | ------ |
 | /books | GET | Get all the books |
 | /books | POST | Create a books |
-| /books/:isbn | DELETE | Delete a books |
-| /books/:isbn | PUT | Update a books with new info |
+| /books/:id | DELETE | Delete a books |
+| /books/:id | PUT | Update a books with new info |
