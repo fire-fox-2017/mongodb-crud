@@ -1,4 +1,5 @@
 var methods = {}
+var mongo = require('mongodb')
 var MongoClient = require('mongodb').MongoClient
 var url = 'mongodb://localhost/mongodbcrud'
 
@@ -30,7 +31,18 @@ methods.insert = function(req, res, next) {
 methods.update = function(req, res, next) {
     MongoClient.connect(url, function(err, db) {
         var collection = db.collection('books')
-        collection.updateOne(req.body, function(err, record) {
+        collection.updateOne({
+            "_id": new mongo.ObjectID(req.params.id)
+        }, {
+            $set: {
+                "isbn": req.body.isbn,
+                "title": req.body.title,
+                "author": req.body.author,
+                "category": req.body.category,
+                "stock": req.body.stock
+            }
+        }, function(err, record) {
+            // console.log(record);
             if (err) {
                 // console.log('Masuk');
                 res.json({
