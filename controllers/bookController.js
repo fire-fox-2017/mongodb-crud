@@ -11,7 +11,7 @@ methods.getAllBook = (req, res, next) => {
             if (err) {
                 res.json(err)
             } else {
-                res.json(docs)
+                console.log(docs)
             }
             db.close()
         })
@@ -47,24 +47,56 @@ methods.updateBook = (req, res, next) => {
 
     MongoClient.connect(url, function(err, db) {
 
-        db.collection('books').updateOne({
-            "_id": new mongo.ObjectID(req.params.id)
-        }, {
-            $set: {
-                "isbn": req.body.isbn,
-                "title": req.body.title,
-                "author": req.body.author,
-                "category": req.body.category,
-                "stock": req.body.stock
-            }
-        }, (err, book) => {
+        // db.collection('books').updateOne({
+        //     "_id": new mongo.ObjectID(req.params.id)
+        // }, {
+        //     $set: {
+        //         "isbn": req.body.isbn,
+        //         "title": req.body.title,
+        //         "author": req.body.author,
+        //         "category": req.body.category,
+        //         "stock": req.body.stock
+        //     }
+        // }, (err, book) => {
+        //     if (err) {
+        //         res.json(err)
+        //     } else {
+        //         res.json(book)
+        //     }
+        //     db.close()
+        // })
+
+        db.collection('books').find({
+            _id: new mongo.ObjectID(req.params.id)
+        }).toArray(function(err, docs) {
             if (err) {
                 res.json(err)
             } else {
-                res.json(book)
+                db.collection('books').updateOne({
+                    "_id": new mongo.ObjectID(req.params.id)
+                }, {
+                    $set: {
+                        "isbn": req.body.isbn || docs[0].isbn,
+                        "title": req.body.title || docs[0].title,
+                        "author": req.body.author || docs[0].author,
+                        "category": req.body.category || docs[0].category,
+                        "stock": req.body.stock || docs[0].stock
+                    }
+                }, (err, book) => {
+                    if (err) {
+                        res.json(err)
+                    } else {
+                        res.json(book)
+                    }
+                })
             }
             db.close()
         })
+
+
+
+
+
     });
 }
 
