@@ -3,14 +3,6 @@ var mongo = require('mongodb')
 var MongoClient = require('mongodb').MongoClient
 var url = 'mongodb://localhost/mongodbcrud'
 
-// {
-//     isbn: "978-1-60309-057-5",
-//     title: "Dragon Puncher",
-//     author: "James Kochalka",
-//     category: "All Ages",
-//     stock: 5
-// }
-
 methods.insert = function(req, res, next) {
     MongoClient.connect(url, function(err, db) {
         var collection = db.collection('books')
@@ -60,6 +52,25 @@ methods.getAll = function(req, res, next) {
     MongoClient.connect(url, function(err, db) {
         var collection = db.collection('books')
         collection.find({}).toArray(function(err, records) {
+            console.log("Found the following records");
+            if (err) {
+                res.json({
+                    err
+                })
+            } else {
+                res.json(records)
+            }
+            db.close()
+        });
+    });
+}
+
+methods.getById = function(req, res, next) {
+    MongoClient.connect(url, function(err, db) {
+        var collection = db.collection('books')
+        collection.find({
+            "_id": new mongo.ObjectID(req.params.id)
+        }).toArray(function(err, records) {
             console.log("Found the following records");
             if (err) {
                 res.json({
