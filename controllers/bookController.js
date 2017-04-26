@@ -73,4 +73,24 @@ methods.getAll = function(req, res, next) {
     });
 }
 
+methods.delete = function(req, res, next) {
+    MongoClient.connect(url, function(err, db) {
+        var collection = db.collection('books')
+        collection.deleteOne({
+            "_id": new mongo.ObjectID(req.params.id)
+        }, function(err, record) {
+            // console.log(record);
+            if (err) {
+                // console.log('Masuk');
+                res.json({
+                    err
+                })
+            } else {
+                res.json(record)
+            }
+            db.close()
+        });
+    });
+}
+
 module.exports = methods
