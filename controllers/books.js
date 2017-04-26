@@ -26,4 +26,39 @@ methods.gets = (req, res, next) => {
   });
 }
 
+methods.get = (req, res, next) => {
+  MongoClient.connect(url, (err, db) => {
+    db.collection('books').find({ isbn: req.body.isbn }).toArray((err, book) => {
+      if(book.length < 1) {
+        res.send('buku yang diinginkan tidak ada!');
+      } else {
+        if(err) throw err;
+        res.send(book);
+      } 
+    });
+  });
+}
+
+methods.delete = (req, res, next) => {
+  MongoClient.connect(url, (err, db) => {
+    db.collection('books').deleteOne({ isbn: req.body.isbn }, (err, book) => {
+      if(err) throw err;
+      res.send(`success delete book with isbn: ${req.body.isbn}`);
+    });
+  });
+}
+
+methods.edit = (req, res, next) => {
+  MongoClient.connect(url, (err, db) => {
+    db.collection('books').updateOne( {'isbn': req.body.isbn }, 
+    { $set: { 'title': req.body.title, 
+    'author': req.body.author, 
+    'category': req.body.category, 
+    'stock': req.body.stock } }, (err, book) => {
+      if(err) throw err;
+      res.send(`success edit book info with isbn: ${req.body.isbn}`);
+    });
+  });
+}
+
 module.exports = methods;
