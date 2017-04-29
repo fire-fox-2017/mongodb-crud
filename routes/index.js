@@ -4,7 +4,7 @@ var bookController = require('../controllers/books.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'MongoDB-CRUD' });
 });
 
 router.get('/api/books', bookController.showAll);
